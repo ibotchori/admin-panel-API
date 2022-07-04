@@ -10,6 +10,7 @@
       "no-restricted-syntax": "off",
       "no-underscore-dangle": "off",
       "import/prefer-default-export": "off",
-      "import/extensions": "off"      
+      "import/extensions": "off",
+      "no-unused-vars":"off"   
   }
 }
