@@ -5,7 +5,7 @@ import User from '../models/userModel'
 
 /* Generate JWT */
 const generateToken = (id) =>
-  // it takes 3 argument. 1 payload, passed in {id}. 2 secret. 3 expires in
+  // it takes 3 argument. 1 payload, passed in {id} (set the id in the token). 2 secret. 3 expires in
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   })
@@ -80,5 +80,6 @@ export const login = asyncHandler(async (req, res) => {
 // @route GET /user
 // @access Public
 export const getUser = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Get user data' })
+  // get user data (from the middleware) on response
+  res.status(200).json(req.user)
 })
