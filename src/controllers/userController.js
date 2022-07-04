@@ -17,3 +17,10 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Login' })
 })
+
+// @desc Authenticate a user
+// @route GET /user
+// @access Public
+export const getUser = asyncHandler(async (req, res) => {
+  res.status(200).json({ message: 'Get user data' })
+})
