@@ -3,6 +3,13 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/userModel'
 
+/* Generate JWT */
+const generateToken = (id) =>
+  // it takes 3 argument. 1 payload, passed in {id}. 2 secret. 3 expires in
+  jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  })
+
 // @desc Register new user
 // @route POST /register
 // @access Public
@@ -38,6 +45,7 @@ export const register = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: user.id,
       email: user.email,
+      token: generateToken(user._id),
     })
   } else {
     res.status(400)
@@ -60,6 +68,7 @@ export const login = asyncHandler(async (req, res) => {
     res.json({
       _id: user.id,
       email: user.email,
+      token: generateToken(user._id),
     })
   } else {
     res.status(400)
