@@ -2,8 +2,11 @@
 // @route POST /register
 // @access Public
 export const register = (req, res) => {
-  console.log(req.body)
-  res.status(200).json({ message: 'Register user' })
+  if (!req.body.text) {
+    res.status(400)
+    throw new Error('Please add a text')
+  }
+  res.status(200).json(req.body)
 }
 
 // @desc Authenticate a user
