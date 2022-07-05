@@ -81,5 +81,6 @@ export const login = asyncHandler(async (req, res) => {
 // @access Public
 export const getUser = asyncHandler(async (req, res) => {
   // get user data (from the middleware) on response
-  res.status(200).json(req.user)
+  const { _id, email } = req.user
+  res.status(200).json({ _id, email })
 })

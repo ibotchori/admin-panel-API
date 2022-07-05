@@ -1,15 +1,27 @@
 import express, { json } from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
+import YAML from 'yamljs'
+import swaggerUI from 'swagger-ui-express'
 import userRouter from './routes/userRoutes'
 import { errorHandler } from './middleware/errorMiddleware'
 import connectDB from './config/db'
+
+/**
+ * Load swagger document.
+ */
+const swaggerDocument = YAML.load('./src/config/swagger.yaml')
 
 dotenv.config()
 
 const app = express()
 // Connect to mongo database
 connectDB()
+
+/**
+ * Setting up swagger middleware.
+ */
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 // Middleware
 app.use(json()) // <-- body parser
