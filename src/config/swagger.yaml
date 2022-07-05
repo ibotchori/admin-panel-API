@@ -7,7 +7,7 @@ info:
 servers:
   - url: http://localhost:4000/
     description: local server
-  - url: http://producation.app/api
+  - url: http://producation.app/
     description: production server
 components:
   securitySchemes:
@@ -18,11 +18,13 @@ components:
 paths:
   /user:
     get:
+      tags:
+        - User Information
       security:
         - bearerAuth: []
       responses:
         '200': 
-          description: Returns a list of users.
+          description: Returns information of user.
           content:
             application/json:
               schema: 
@@ -35,3 +37,41 @@ paths:
                   example:
                     _id: "62c2ef14dc41eb120af63460"
                     email: gela@redberry.ge
+  /login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+            example:
+              email: kosta
+              password: "123"
+      responses:
+        '200': 
+          description: User login.
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:                  
+                    _id:
+                      type: string
+                    email:
+                      type: string
+                    token:
+                      type: string
+                  example:                    
+                      _id: "62c2ef14dc41eb120af63460"
+                      email: "gela"
+                      token: "eyJhbGciOiJIU1NzA0MzQyOCwiZX-E7VSXu7C2ZcT-uyCyjzXp2FiNrs_xCKwV8"
+                               
