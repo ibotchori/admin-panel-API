@@ -21,6 +21,7 @@ export const register = asyncHandler(async (req, res) => {
 
   if (error) {
     //  return res.status(422).json(error.details)
+    res.status(422)
     throw new Error(error.details[0].message)
   }
 

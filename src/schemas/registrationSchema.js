@@ -31,6 +31,10 @@ const registrationSchema = async (data) => {
       'any.required': 'Password filed is required.',
       'string.min': `Password should have a minimum length of {#limit}`,
     }),
+    repeatPassword: Joi.any().equal(Joi.ref('password')).required().messages({
+      'any.only': 'Passwords does not match',
+      'any.required': 'Repeat password filed is required.',
+    }),
   })
 }
 

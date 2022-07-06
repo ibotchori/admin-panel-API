@@ -32,9 +32,13 @@ paths:
                 password:
                   type: string
                   required: true
+                repeatPassword:
+                  type: string
+                  required: true
             example:
               email: kosta@gmail.com
               password: "123123"
+              repeatPassword: "123123"
       responses:
         '200': 
           description: User Registration.
