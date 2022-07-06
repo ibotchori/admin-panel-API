@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/userModel'
+import registrationSchema from '../schemas/registrationSchema'
 
 /* Generate JWT */
 const generateToken = (id) =>
@@ -14,20 +15,16 @@ const generateToken = (id) =>
 // @route POST /register
 // @access Public
 export const register = asyncHandler(async (req, res) => {
-  // Extract name, email and password from request body
-  const { email, password } = req.body
-  // if one of them is not in request body, trow error
-  if (!email || !password) {
-    res.status(400)
-    throw new Error('Please add all fields')
+  /* Validation with Joi */
+  const validator = await registrationSchema(req.body)
+  const { value: data, error } = validator.validate(req.body)
+
+  if (error) {
+    //  return res.status(422).json(error.details)
+    throw new Error(error.details[0].message)
   }
 
-  // Check if user exist
-  const userExist = await User.findOne({ email })
-  if (userExist) {
-    res.status(400)
-    throw new Error('User already exist')
-  }
+  const { email, password } = data
 
   // Hash password
   // create salt
@@ -47,9 +44,6 @@ export const register = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
     })
-  } else {
-    res.status(400)
-    throw new Error('Invalid user data')
   }
 })
 
