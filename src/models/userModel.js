@@ -4,6 +4,11 @@ const { Schema } = mongoose
 
 const userSchema = Schema(
   {
+    username: {
+      type: String,
+      required: [true, 'Please add username'],
+      unique: true,
+    },
     email: {
       type: String,
       required: [true, 'Please add a email'],

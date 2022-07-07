@@ -25,7 +25,7 @@ export const register = asyncHandler(async (req, res) => {
     throw new Error(error.details[0].message)
   }
 
-  const { email, password } = data
+  const { email, password, username } = data
 
   // Hash password
   // create salt
@@ -35,6 +35,7 @@ export const register = asyncHandler(async (req, res) => {
 
   // Create User
   const user = await User.create({
+    username,
     email,
     password: hashedPassword,
   })
@@ -42,6 +43,7 @@ export const register = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user.id,
+      username: user.username,
       email: user.email,
       token: generateToken(user._id),
     })
@@ -61,6 +63,7 @@ export const login = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     // back user information on response
     res.json({
+      username: user.username,
       _id: user.id,
       email: user.email,
       token: generateToken(user._id),
@@ -76,6 +79,6 @@ export const login = asyncHandler(async (req, res) => {
 // @access Public
 export const getUser = asyncHandler(async (req, res) => {
   // get user data (from the middleware) on response
-  const { _id, email } = req.user
-  res.status(200).json({ _id, email })
+  const { username, _id, email } = req.user
+  res.status(200).json({ username, _id, email })
 })

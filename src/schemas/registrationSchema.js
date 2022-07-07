@@ -1,6 +1,16 @@
 import Joi from 'joi'
 import User from '../models/userModel'
 
+const usernameShouldBeUniqueRule = (user) => (value, helper) => {
+  if (!user) {
+    return value
+  }
+  if (user.username === value) {
+    return helper.message('This username is already taken.')
+  }
+  return value
+}
+
 const emailIsAlreadyTaken = (user) => (value, helper) => {
   if (!user) {
     return value
@@ -13,14 +23,31 @@ const emailIsAlreadyTaken = (user) => (value, helper) => {
 }
 
 const registrationSchema = async (data) => {
+  const foundUserWithUsername = await User.findOne({ username: data.username })
   const foundUserWithEmail = await User.findOne({ email: data.email })
 
   return Joi.object({
+    username: Joi.string()
+      .min(3)
+      .max(30)
+      .custom(
+        usernameShouldBeUniqueRule(foundUserWithUsername),
+        'unique username'
+      )
+      .required()
+      .messages({
+        'string.empty': `Username cannot be an empty field`,
+        'string.base': 'Username field should be string.',
+        'string.min': 'Username field should be at lease 3 characters long.',
+        'string.max': 'Username field should be maximum 30 characters long.',
+        'any.required': 'Username field is required.',
+      }),
     email: Joi.string()
       .email()
       .custom(emailIsAlreadyTaken(foundUserWithEmail), 'unique email')
       .required()
       .messages({
+        'string.empty': `Email cannot be an empty field`,
         'string.base': 'Email field should be string.',
         'string.email': 'Email field should have valid email structure.',
         'any.required': 'Email field is required.',
