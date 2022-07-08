@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/userModel'
 import registrationSchema from '../schemas/registrationSchema'
+import loginSchema from '../schemas/loginSchema'
 
 /* Generate JWT */
 const generateToken = (id) =>
@@ -24,7 +25,7 @@ export const register = asyncHandler(async (req, res) => {
     res.status(422)
     throw new Error(error.details[0].message)
   }
-
+  // value from Joi
   const { email, password, username } = data
 
   // Hash password
@@ -54,23 +55,30 @@ export const register = asyncHandler(async (req, res) => {
 // @route POST /login
 // @access Public
 export const login = asyncHandler(async (req, res) => {
-  // Extract email and password from request body
-  const { email, password } = req.body
+  /* Validation with Joi */
+  const validator = await loginSchema(req.body)
+  const { value: data, error } = validator.validate(req.body)
 
-  // check for user email
-  const user = await User.findOne({ email })
+  if (error) {
+    //  return res.status(422).json(error.details)
+    res.status(422)
+    throw new Error(error.details[0].message)
+  }
+  // value from Joi
+  const { email, password } = data
+
   // check if user is already in database and password is correct
-  if (user && (await bcrypt.compare(password, user.password))) {
-    // back user information on response
+  const userExist = await User.findOne({ email })
+  const passwordIsCorrect = await bcrypt.compare(password, userExist.password)
+  if (userExist && passwordIsCorrect) {
+    // back token on response
     res.json({
-      username: user.username,
-      _id: user.id,
-      email: user.email,
-      token: generateToken(user._id),
+      token: generateToken(userExist._id),
     })
   } else {
+    // if password is incorrect
     res.status(400)
-    throw new Error('Invalid credentials')
+    throw new Error('Please, provide correct credentials...')
   }
 })
 
