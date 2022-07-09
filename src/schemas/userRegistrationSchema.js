@@ -38,8 +38,10 @@ const userRegistrationSchema = async (data) => {
       .messages({
         'string.empty': `Username cannot be an empty field`,
         'string.base': 'Username field should be string.',
-        'string.min': 'Username field should be at lease 3 characters long.',
-        'string.max': 'Username field should be maximum 30 characters long.',
+        'string.min':
+          'Username field should be at lease {#limit} characters long.',
+        'string.max':
+          'Username field should be maximum {#limit} characters long.',
         'any.required': 'Username field is required.',
       }),
     email: Joi.string()
@@ -55,12 +57,12 @@ const userRegistrationSchema = async (data) => {
     password: Joi.string().alphanum().min(3).required().messages({
       'string.base': 'Password field should be string.',
       'string.alphanum': 'Password field should be alphanumeric.',
-      'any.required': 'Password filed is required.',
+      'any.required': 'Password field is required.',
       'string.min': `Password should have a minimum length of {#limit}`,
     }),
     repeatPassword: Joi.any().equal(Joi.ref('password')).required().messages({
       'any.only': 'Passwords does not match',
-      'any.required': 'Repeat password filed is required.',
+      'any.required': 'Repeat password field is required.',
     }),
   })
 }
