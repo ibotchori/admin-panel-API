@@ -4,6 +4,7 @@ import colors from 'colors'
 import YAML from 'yamljs'
 import swaggerUI from 'swagger-ui-express'
 import userRouter from './routes/userRoutes'
+import companyRouter from './routes/companyRoute'
 import { errorHandler } from './middleware/errorMiddleware'
 import connectDB from './config/db'
 
@@ -31,6 +32,7 @@ const PORT = process.env.SERVER_PORT || 4000
 
 /*  Routes */
 app.use('/', userRouter)
+app.use('/api/companies', companyRouter)
 
 // overwrite the default express error handler with custom error handler middleware
 app.use(errorHandler) // <-- error handler middleware
