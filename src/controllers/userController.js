@@ -46,7 +46,6 @@ export const register = asyncHandler(async (req, res) => {
       _id: user.id,
       username: user.username,
       email: user.email,
-      token: generateToken(user._id),
     })
   }
 })
@@ -88,5 +87,5 @@ export const login = asyncHandler(async (req, res) => {
 export const getUser = asyncHandler(async (req, res) => {
   // get user data (from the middleware) on response
   const { username, _id, email } = req.user
-  res.status(200).json({ username, _id, email })
+  res.status(200).json({ _id, username, email })
 })

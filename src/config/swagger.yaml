@@ -26,6 +26,9 @@ paths:
             schema:
               type: object
               properties:
+                username:
+                  type: string
+                  required: true
                 email:
                   type: string
                   required: true
@@ -36,6 +39,7 @@ paths:
                   type: string
                   required: true
             example:
+              username: kosta
               email: kosta@gmail.com
               password: "123123"
               repeatPassword: "123123"
@@ -47,14 +51,16 @@ paths:
               schema: 
                   type: object
                   properties:                  
+                    username:
+                      type: string
                     email:
                       type: string
                     password:
                       type: string
                   example:
                       _id: "62c2ef14dc41eb120af63460"
+                      username: "kosta"
                       email: "kosta@gmail.com"
-                      token: "eyJhbGciOiJIU1NzA0MzQyOCwiZX-E7VSXu7C2ZcT-uyCyjzXp2FiNrs_xCKwV8"
   /login:
     post:
       tags:
@@ -72,7 +78,7 @@ paths:
                   type: string
                   required: true
             example:
-              email: kosta
+              email: kosta@gmail.com
               password: "123"
       responses:
         '200': 
@@ -81,16 +87,10 @@ paths:
             application/json:
               schema: 
                   type: object
-                  properties:                  
-                    _id:
-                      type: string
-                    email:
-                      type: string
+                  properties:
                     token:
                       type: string
-                  example:                    
-                      _id: "62c2ef14dc41eb120af63460"
-                      email: "kosta@gmail.com"
+                  example:
                       token: "eyJhbGciOiJIU1NzA0MzQyOCwiZX-E7VSXu7C2ZcT-uyCyjzXp2FiNrs_xCKwV8"
   /user:
     get:
@@ -108,8 +108,11 @@ paths:
                   properties:                  
                     _id:
                       type: string
+                    username:
+                      type: string
                     email:
                       type: string
                   example:
                     _id: "62c2ef14dc41eb120af63460"
+                    username: "kosta"                             
                     email: "kosta@gmail.com"                             
