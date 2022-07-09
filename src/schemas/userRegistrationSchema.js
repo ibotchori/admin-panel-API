@@ -22,7 +22,7 @@ const emailIsAlreadyTaken = (user) => (value, helper) => {
   return value
 }
 
-const registrationSchema = async (data) => {
+const userRegistrationSchema = async (data) => {
   const foundUserWithUsername = await User.findOne({ username: data.username })
   const foundUserWithEmail = await User.findOne({ email: data.email })
 
@@ -65,4 +65,4 @@ const registrationSchema = async (data) => {
   })
 }
 
-export default registrationSchema
+export default userRegistrationSchema

@@ -8,7 +8,7 @@ const determineIfUserExists = (user) => (value, helpers) => {
   return value
 }
 
-const loginSchema = async (data) => {
+const userLoginSchema = async (data) => {
   const user = await User.findOne({ email: data.email })
 
   return Joi.object({
@@ -30,4 +30,4 @@ const loginSchema = async (data) => {
   })
 }
 
-export default loginSchema
+export default userLoginSchema

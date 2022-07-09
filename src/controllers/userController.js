@@ -2,8 +2,7 @@ import asyncHandler from 'express-async-handler'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/userModel'
-import registrationSchema from '../schemas/registrationSchema'
-import loginSchema from '../schemas/loginSchema'
+import { userRegistrationSchema, userLoginSchema } from '../schemas'
 
 /* Generate JWT */
 const generateToken = (id) =>
@@ -17,7 +16,7 @@ const generateToken = (id) =>
 // @access Public
 export const register = asyncHandler(async (req, res) => {
   /* Validation with Joi */
-  const validator = await registrationSchema(req.body)
+  const validator = await userRegistrationSchema(req.body)
   const { value: data, error } = validator.validate(req.body)
 
   if (error) {
@@ -55,7 +54,7 @@ export const register = asyncHandler(async (req, res) => {
 // @access Public
 export const login = asyncHandler(async (req, res) => {
   /* Validation with Joi */
-  const validator = await loginSchema(req.body)
+  const validator = await userLoginSchema(req.body)
   const { value: data, error } = validator.validate(req.body)
 
   if (error) {
