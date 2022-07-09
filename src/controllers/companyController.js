@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Company from '../models/companyModel'
+import companyRegistrationSchema from '../schemas/companyRegistrationSchema'
 
 // @desc Get all companies
 // @route GET /api/companies
@@ -19,12 +20,24 @@ export const getCompanies = asyncHandler(async (req, res) => {
 // @route POST /api/companies
 // @access Private
 export const setCompany = asyncHandler(async (req, res) => {
+  /* Validation with Joi */
+  const validator = await companyRegistrationSchema(req.body)
+  const { value: data, error } = validator.validate(req.body)
+
+  if (error) {
+    //  return res.status(422).json(error.details)
+    res.status(422)
+    throw new Error(error.details[0].message)
+  }
+
+  // value from Joi
+  const { name, url, logo, date } = data
   // creating a company
   const company = await Company.create({
-    name: req.body.name,
-    url: req.body.url,
-    logo: req.body.logo,
-    date: req.body.date,
+    name,
+    url,
+    logo,
+    date,
   })
   //  see created company on response
   res.status(200).json(company)
