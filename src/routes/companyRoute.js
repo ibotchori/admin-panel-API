@@ -3,8 +3,8 @@ import {
   setCompany,
   getCompanies,
   getCompany,
-  updateCompanies,
-  deleteCompanies,
+  updateCompany,
+  deleteCompany,
 } from '../controllers/companyController'
 import authMiddleware from '../middleware/authMiddleware'
 
@@ -17,7 +17,7 @@ router
 router
   .route('/:id')
   .get(authMiddleware, getCompany)
-  .put(authMiddleware, updateCompanies)
-  .delete(authMiddleware, deleteCompanies)
+  .put(authMiddleware, updateCompany)
+  .delete(authMiddleware, deleteCompany)
 
 export default router

@@ -65,7 +65,7 @@ export const getCompany = asyncHandler(async (req, res) => {
 // @desc  Update Companies
 // @route PUT /api/companies/:id
 // @access Private
-export const updateCompanies = asyncHandler(async (req, res) => {
+export const updateCompany = asyncHandler(async (req, res) => {
   // get company from database by id
   const company = await Company.findById(req.params.id)
 
@@ -90,17 +90,20 @@ export const updateCompanies = asyncHandler(async (req, res) => {
 // @desc Delete company
 // @route PUT /api/companies/:id
 // @access Private
-export const deleteCompanies = asyncHandler(async (req, res) => {
-  // get company from database by id
-  const company = await Company.findById(req.params.id)
-  // if no company found, trow the error
-  if (!company) {
-    res.status(200)
-    throw new Error('Company not found')
+export const deleteCompany = asyncHandler(async (req, res) => {
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    // get specific company from database by id
+    const company = await Company.findById(req.params.id)
+    if (!company) {
+      res.status(400)
+      throw new Error('No company found with this id.')
+    }
+    // remove company from database
+    await company.remove()
+    // see removed company id response
+    res.status(200).json({ id: req.params.id })
+  } else {
+    res.status(422)
+    throw new Error('ObjectID format is required.')
   }
-
-  // remove company from database
-  await company.remove()
-  // see removed company id response
-  res.status(200).json({ id: req.params.id })
 })
