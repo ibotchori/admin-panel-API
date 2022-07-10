@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler'
+import mongoose from 'mongoose'
 import Company from '../models/companyModel'
 import companyRegistrationSchema from '../schemas/companyRegistrationSchema'
-
 // @desc Get all companies
 // @route GET /api/companies
 // @access Private
@@ -47,15 +47,19 @@ export const setCompany = asyncHandler(async (req, res) => {
 // @route GET /api/companies/:id
 // @access Private
 export const getCompany = asyncHandler(async (req, res) => {
-  // get specific company from database by id
-  const company = await Company.findById(req.params.id)
-
-  if (!company) {
-    res.status(400)
-    throw new Error('Company not found')
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    // get specific company from database by id
+    const company = await Company.findById(req.params.id)
+    if (!company) {
+      res.status(400)
+      throw new Error('No company found with this id.')
+    }
+    // show company on response
+    res.status(200).json(company)
+  } else {
+    res.status(422)
+    throw new Error('ObjectID format is required.')
   }
-  // show company on response
-  res.status(200).json(company)
 })
 
 // @desc  Update Companies
