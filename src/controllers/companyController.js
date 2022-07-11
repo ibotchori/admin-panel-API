@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import mongoose from 'mongoose'
 import Company from '../models/companyModel'
 import companyRegistrationSchema from '../schemas/companyRegistrationSchema'
+
 // @desc Get all companies
 // @route GET /api/companies
 // @access Private
@@ -47,6 +48,7 @@ export const setCompany = asyncHandler(async (req, res) => {
 // @route GET /api/companies/:id
 // @access Private
 export const getCompany = asyncHandler(async (req, res) => {
+  // validate ObjectID with mongoose
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     // get specific company from database by id
     const company = await Company.findById(req.params.id)
@@ -66,31 +68,48 @@ export const getCompany = asyncHandler(async (req, res) => {
 // @route PUT /api/companies/:id
 // @access Private
 export const updateCompany = asyncHandler(async (req, res) => {
-  // get company from database by id
-  const company = await Company.findById(req.params.id)
-
-  if (!company) {
-    res.status(400)
-    throw new Error('Company not found')
-  }
-
-  // update company
-  const updatedCompany = await Company.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
+  // validate ObjectID with mongoose
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    // get specific company from database by id
+    const company = await Company.findById(req.params.id)
+    if (!company) {
+      res.status(400)
+      throw new Error('There is no company with this ID.')
     }
-  )
+    /* Validation with Joi */
+    const validator = await companyRegistrationSchema(req.body)
+    const { value: data, error } = validator.validate(req.body)
 
-  // see updated company on response
-  res.status(200).json(updatedCompany)
+    if (error) {
+      //  return res.status(422).json(error.details)
+      res.status(422)
+      throw new Error(error.details[0].message)
+    }
+
+    // value from Joi
+    const { name, url, logo, date } = data
+    // update company
+    const updatedCompany = await Company.findByIdAndUpdate(
+      req.params.id,
+      { name, url, logo, date },
+      {
+        new: true,
+      }
+    )
+
+    // see updated company on response
+    res.status(200).json(updatedCompany)
+  } else {
+    res.status(422)
+    throw new Error('ObjectID format is required.')
+  }
 })
 
 // @desc Delete company
 // @route PUT /api/companies/:id
 // @access Private
 export const deleteCompany = asyncHandler(async (req, res) => {
+  // validate ObjectID with mongoose
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     // get specific company from database by id
     const company = await Company.findById(req.params.id)
