@@ -13,6 +13,6 @@ const companySchema = new Schema(
   { timestamps: true }
 )
 
-const Country = mongoose.model('Company', companySchema)
+const Company = mongoose.model('Company', companySchema)
 
-export default Country
+export default Company

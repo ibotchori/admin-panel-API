@@ -3,9 +3,7 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import YAML from 'yamljs'
 import swaggerUI from 'swagger-ui-express'
-import userRouter from './routes/userRoutes'
-import companyRouter from './routes/companyRoute'
-import employeeRouter from './routes/employeeRoute'
+import { userRoutes, companyRoutes, employeeRoutes } from './routes'
 import { errorHandler } from './middleware/errorMiddleware'
 import connectDB from './config/db'
 
@@ -32,9 +30,9 @@ app.use(express.urlencoded({ extended: false })) // <-- url encode
 const PORT = process.env.SERVER_PORT || 4000
 
 /*  Routes */
-app.use('/', userRouter)
-app.use('/api/companies', companyRouter)
-app.use('/api/employees', employeeRouter)
+app.use('/', userRoutes)
+app.use('/api/companies', companyRoutes)
+app.use('/api/employees', employeeRoutes)
 
 // overwrite the default express error handler with custom error handler middleware
 app.use(errorHandler) // <-- error handler middleware
