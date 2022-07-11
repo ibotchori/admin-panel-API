@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import Joi from 'joi'
 import Company from '../models/companyModel'
 
