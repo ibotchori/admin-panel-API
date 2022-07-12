@@ -1,22 +1,48 @@
 import asyncHandler from 'express-async-handler'
 import mongoose from 'mongoose'
 import Employee from '../models/employeeModel'
+import employeeRegistrationSchema from '../schemas/employeeRegistrationSchema'
 
 // @desc Create new employee
 // @route POST /api/employees
 // @access Private
 export const setEmployee = asyncHandler(async (req, res) => {
-  // creating a specific user goals
-  const employee = await Employee.create({
-    companyID: req.body.companyID,
-    name: req.body.name,
-    surname: req.body.surname,
-    startingDate: req.body.startingDate,
-    dayOfBirth: req.body.dayOfBirth,
-    personalNumber: req.body.personalNumber,
-    position: req.body.position,
-  })
+  // validate ObjectID with mongoose
+  if (mongoose.Types.ObjectId.isValid(req.body.companyID)) {
+    /* Validation with Joi */
+    const validator = await employeeRegistrationSchema(req.body)
+    const { value: data, error } = validator.validate(req.body)
 
-  //  see created employee on response
-  res.status(200).json(employee)
+    if (error) {
+      res.status(422)
+      throw new Error(error.details[0].message)
+    }
+
+    // value from Joi
+    const {
+      companyID,
+      name,
+      surname,
+      startingDate,
+      dayOfBirth,
+      personalNumber,
+      position,
+    } = data
+    // creating a employee
+    const employee = await Employee.create({
+      companyID,
+      name,
+      surname,
+      startingDate,
+      dayOfBirth,
+      personalNumber,
+      position,
+    })
+
+    //  see created employee on response
+    res.status(200).json(employee)
+  } else {
+    res.status(422)
+    throw new Error('ObjectID format is required.')
+  }
 })
