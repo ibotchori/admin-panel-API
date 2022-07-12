@@ -60,11 +60,11 @@ export const getCompany = asyncHandler(async (req, res) => {
     res.status(200).json(company)
   } else {
     res.status(422)
-    throw new Error('ObjectID format is required.')
+    throw new Error('Params should be ObjectID format.')
   }
 })
 
-// @desc  Update Companies
+// @desc Update Company
 // @route PUT /api/companies/:id
 // @access Private
 export const updateCompany = asyncHandler(async (req, res) => {
@@ -101,7 +101,7 @@ export const updateCompany = asyncHandler(async (req, res) => {
     res.status(200).json(updatedCompany)
   } else {
     res.status(422)
-    throw new Error('ObjectID format is required.')
+    throw new Error('Params should be ObjectID format.')
   }
 })
 
@@ -123,6 +123,6 @@ export const deleteCompany = asyncHandler(async (req, res) => {
     res.status(200).json({ id: req.params.id })
   } else {
     res.status(422)
-    throw new Error('ObjectID format is required.')
+    throw new Error('Params should be ObjectID format.')
   }
 })
