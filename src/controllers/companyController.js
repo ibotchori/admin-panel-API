@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import mongoose from 'mongoose'
 import Company from '../models/companyModel'
+import Employee from '../models/employeeModel'
 import companyRegistrationSchema from '../schemas/companyRegistrationSchema'
 
 // @desc Get all companies
@@ -56,15 +57,27 @@ export const getCompany = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error('No company found with this id.')
     }
-    // show company on response
-    res.status(200).json(company)
+    // extract data from founded company
+    const { name, url, logo, date } = company
+
+    // find employees with same companyID
+    const employees = await Employee.find({ companyID: req.params.id })
+
+    // show company with employees on response
+    res.status(200).json({
+      name,
+      url,
+      logo,
+      date,
+      employees,
+    })
   } else {
     res.status(422)
     throw new Error('Params should be ObjectID format.')
   }
 })
 
-// @desc Update Company
+// @desc Update Companies
 // @route PUT /api/companies/:id
 // @access Private
 export const updateCompany = asyncHandler(async (req, res) => {
