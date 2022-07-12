@@ -43,7 +43,7 @@ export const setEmployee = asyncHandler(async (req, res) => {
     res.status(200).json(employee)
   } else {
     res.status(422)
-    throw new Error('ObjectID format is required.')
+    throw new Error('CompanyID should be ObjectID format.')
   }
 })
 
@@ -63,9 +63,71 @@ export const getEmployee = asyncHandler(async (req, res) => {
     res.status(200).json(employee)
   } else {
     res.status(422)
-    throw new Error('ObjectID format is required.')
+    throw new Error('Params should be ObjectID format.')
   }
 })
+
+// @desc Update Employee
+// @route PUT /api/employees/:id
+// @access Private
+export const updateEmployee = asyncHandler(async (req, res) => {
+  // validate ObjectID with mongoose
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    // get specific employee from database by id
+    const employee = await Employee.findById(req.params.id)
+    if (!employee) {
+      res.status(400)
+      throw new Error('There is no employee with this ID.')
+    }
+    /* Validation with Joi */
+    const validator = await employeeRegistrationSchema(req.body)
+    const { value: data, error } = validator.validate(req.body)
+
+    if (error) {
+      res.status(422)
+      throw new Error(error.details[0].message)
+    }
+
+    // value from Joi
+    const {
+      companyID,
+      name,
+      surname,
+      startingDate,
+      dayOfBirth,
+      personalNumber,
+      position,
+    } = data
+
+    // validate Company id with mongoose
+    if (!mongoose.Types.ObjectId.isValid(req.body.companyID)) {
+      throw new Error('CompanyID should be ObjectID format.')
+    }
+    // update employee
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+      req.params.id,
+      {
+        companyID,
+        name,
+        surname,
+        startingDate,
+        dayOfBirth,
+        personalNumber,
+        position,
+      },
+      {
+        new: true,
+      }
+    )
+
+    // see updated employee on response
+    res.status(200).json(updatedEmployee)
+  } else {
+    res.status(422)
+    throw new Error('Params should be ObjectID format.')
+  }
+})
+
 // @desc Delete specific employee
 // @route DELETE /api/employees/:id
 // @access Private
@@ -84,6 +146,6 @@ export const deleteEmployee = asyncHandler(async (req, res) => {
     res.status(200).json({ id: req.params.id })
   } else {
     res.status(422)
-    throw new Error('ObjectID format is required.')
+    throw new Error('Params should be ObjectID format.')
   }
 })

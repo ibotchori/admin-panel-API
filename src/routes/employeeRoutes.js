@@ -3,6 +3,7 @@ import {
   deleteEmployee,
   getEmployee,
   setEmployee,
+  updateEmployee,
 } from '../controllers/employeeController'
 import authMiddleware from '../middleware/authMiddleware'
 
@@ -12,6 +13,7 @@ router.route('/').post(authMiddleware, setEmployee)
 router
   .route('/:id')
   .get(authMiddleware, getEmployee)
+  .put(authMiddleware, updateEmployee)
   .delete(authMiddleware, deleteEmployee)
 
 export default router
