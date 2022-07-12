@@ -66,3 +66,24 @@ export const getEmployee = asyncHandler(async (req, res) => {
     throw new Error('ObjectID format is required.')
   }
 })
+// @desc Delete specific employee
+// @route DELETE /api/employees/:id
+// @access Private
+export const deleteEmployee = asyncHandler(async (req, res) => {
+  // validate ObjectID with mongoose
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    // get specific employee from database by id
+    const employee = await Employee.findById(req.params.id)
+    if (!employee) {
+      res.status(400)
+      throw new Error('No employee found with this id.')
+    }
+    // remove company from database
+    await employee.remove()
+    // see removed company id response
+    res.status(200).json({ id: req.params.id })
+  } else {
+    res.status(422)
+    throw new Error('ObjectID format is required.')
+  }
+})

@@ -106,7 +106,7 @@ export const updateCompany = asyncHandler(async (req, res) => {
 })
 
 // @desc Delete company
-// @route PUT /api/companies/:id
+// @route DELETE /api/companies/:id
 // @access Private
 export const deleteCompany = asyncHandler(async (req, res) => {
   // validate ObjectID with mongoose
