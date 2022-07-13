@@ -291,6 +291,33 @@ paths:
                       url: "https://www.facebook.com/"                  
                       logo: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"                  
                       date: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"
+  /api/companies/{id}/:
+    delete:
+      summary: Delete company
+      tags:
+        - Company
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: ObjectId
+          minimum: 1
+          description: Company ID is required
+      responses:
+        '200': 
+          description: Returns deleted company id
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      required: true    
+                  example:
+                      _id: 62c9d777b304567fcfbff851                    
   /api/employees:
     post:
       summary: Create new employee
@@ -497,4 +524,4 @@ paths:
                       type: string
                       required: true    
                   example:
-                      id: 62c9d777b304567fcfbff851
+                      _id: 62c9d777b304567fcfbff851
