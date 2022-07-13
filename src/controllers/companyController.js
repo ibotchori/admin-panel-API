@@ -9,7 +9,16 @@ import companyRegistrationSchema from '../schemas/companyRegistrationSchema'
 // @access Private
 export const getCompanies = asyncHandler(async (req, res) => {
   // get all companies from database
-  const companies = await Company.find()
+  const companies = await Company.find(
+    {},
+    // extract only specific fields
+    {
+      name: 1,
+      url: 1,
+      logo: 1,
+      date: 1,
+    }
+  )
   if (companies.length === 0) {
     res.status(400)
     throw new Error('No companies found')
@@ -41,8 +50,8 @@ export const setCompany = asyncHandler(async (req, res) => {
     logo,
     date,
   })
-  //  see created company on response
-  res.status(200).json(company)
+  //  see created company ID on response
+  res.status(200).json({ _id: company._id })
 })
 
 // @desc Get specific company
@@ -114,7 +123,7 @@ export const updateCompany = asyncHandler(async (req, res) => {
     // value from Joi
     const { name, url, logo, date } = data
     // update company
-    const updatedCompany = await Company.findByIdAndUpdate(
+    await Company.findByIdAndUpdate(
       req.params.id,
       { name, url, logo, date },
       {
@@ -123,7 +132,7 @@ export const updateCompany = asyncHandler(async (req, res) => {
     )
 
     // see updated company on response
-    res.status(200).json(updatedCompany)
+    res.status(200).json({ name, url, logo, date })
   } else {
     res.status(422)
     throw new Error('Params should be ObjectID format.')
