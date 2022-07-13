@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: NodeJS Project
-  description: Here goes description
+  title: Admin Panel API
+  description: Dashboard of companies and employees
   version: 0.1.9
 
 servers:
@@ -290,4 +290,211 @@ paths:
                       name: "Facebook"                             
                       url: "https://www.facebook.com/"                  
                       logo: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"                  
-                      date: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"                
+                      date: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"
+  /api/employees:
+    post:
+      summary: Create new employee
+      tags:
+        - Employee
+      security:
+        - bearerAuth: []  
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                companyID:
+                  type: string
+                  required: true
+                name:
+                  type: string
+                  required: true
+                surname:
+                  type: string
+                  required: true
+                startingDate:
+                  type: string
+                  required: true
+                dayOfBirth:
+                  type: string
+                  required: true  
+                personalNumber:
+                  type: string
+                  required: true  
+                position:
+                  type: string
+                  required: true  
+            example:
+              companyID: 62cd5a178b710513c17ae362
+              name: David
+              surname: Davituliani
+              startingDate: "2010-10-12"              
+              dayOfBirth: "1990-01-10"
+              personalNumber: "60001022111"
+              position: "Engineer"
+      responses:
+        '200': 
+          description: Returns created employee ID
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                  example:
+                      _id: "62ce9437c5089e55c98fe144"
+  /api/employees/{employeeId}:
+    get:
+      summary: Get employee information
+      tags:
+        - Employee
+      security:
+        - bearerAuth: []      
+      parameters:
+        - in: path
+          name: employeeId
+          required: true
+          type: ObjectId
+          minimum: 1
+          description: Employee ID is required
+      responses:
+        '200': 
+          description: Returns information of employee
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:                  
+                    _id:
+                      type: string
+                    companyID:
+                      type: string
+                    name:
+                      type: string
+                    surname:
+                      type: string
+                    startingDate:
+                      type: string
+                    dayOfBirth:
+                      type: string
+                    personalNumber:
+                      type: string
+                    position:
+                      type: string
+                  example:
+                    _id: "62c2ef14dc41eb120af63460"
+                    companyID: "62c2ef14dc41eb120af63460"
+                    name: "David"                             
+                    surname: "Daviyuliani"
+                    startingDate: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"
+                    dayOfBirth: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"
+                    personalNumber: "6001022111"
+                    position: "Engineer"
+  /api/employees/{employeeId}/:
+    put:
+      summary: Update employee
+      tags:
+        - Employee
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: employeeId
+          required: true
+          type: ObjectId
+          minimum: 1
+          description: Employee ID is required  
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                companyID:
+                  type: string
+                  required: true
+                name:
+                  type: string
+                  required: true
+                surname:
+                  type: string
+                  required: true
+                startingDate:
+                  type: string
+                  required: true
+                dayOfBirth:
+                  type: string
+                  required: true  
+                personalNumber:
+                  type: string
+                  required: true  
+                position:
+                  type: string
+                  required: true  
+            example:
+              companyID: 62c9d777b304567fcfbff851
+              name: David
+              surname: Davituliani
+              startingDate: "2020-01-01"              
+              dayOfBirth: "2010-01-01" 
+              personalNumber: "60001022111"
+              position: "Developer"
+      responses:
+        '200': 
+          description: Returns updated employee information
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:
+                    companyID:
+                      type: string
+                    name:
+                      type: string
+                    surname:
+                      type: string
+                    startingDate:
+                      type: string
+                    dayOfBirth:
+                      type: string  
+                    personalNumber:
+                      type: string  
+                    position:
+                      type: string    
+                  example:
+                      companyID: 62c9d777b304567fcfbff851
+                      name: David
+                      surname: Davituliani
+                      startingDate: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"            
+                      dayOfBirth: "Thu Sep 09 2000 04:00:00 GMT+0400 (Georgia Standard Time)"
+                      personalNumber: "60001022111"
+                      position: "Developer"
+  /api/employees/{id}/:
+    delete:
+      summary: Delete employee
+      tags:
+        - Employee
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: ObjectId
+          minimum: 1
+          description: Employee ID is required
+      responses:
+        '200': 
+          description: Returns deleted employee id
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      required: true    
+                  example:
+                      id: 62c9d777b304567fcfbff851

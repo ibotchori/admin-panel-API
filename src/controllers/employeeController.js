@@ -40,7 +40,9 @@ export const setEmployee = asyncHandler(async (req, res) => {
     })
 
     //  see created employee on response
-    res.status(200).json(employee)
+    res.status(200).json({
+      _id: employee._id,
+    })
   } else {
     res.status(422)
     throw new Error('CompanyID should be ObjectID format.')
@@ -59,8 +61,28 @@ export const getEmployee = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error('No employee found with this id.')
     }
+
+    const {
+      _id,
+      companyID,
+      name,
+      surname,
+      startingDate,
+      dayOfBirth,
+      personalNumber,
+      position,
+    } = employee
     // show employee on response
-    res.status(200).json(employee)
+    res.status(200).json({
+      _id,
+      companyID,
+      name,
+      surname,
+      startingDate,
+      dayOfBirth,
+      personalNumber,
+      position,
+    })
   } else {
     res.status(422)
     throw new Error('Params should be ObjectID format.')
@@ -104,7 +126,7 @@ export const updateEmployee = asyncHandler(async (req, res) => {
       throw new Error('CompanyID should be ObjectID format.')
     }
     // update employee
-    const updatedEmployee = await Employee.findByIdAndUpdate(
+    await Employee.findByIdAndUpdate(
       req.params.id,
       {
         companyID,
@@ -117,11 +139,20 @@ export const updateEmployee = asyncHandler(async (req, res) => {
       },
       {
         new: true,
+        __v: 0,
       }
     )
 
     // see updated employee on response
-    res.status(200).json(updatedEmployee)
+    res.status(200).json({
+      companyID,
+      name,
+      surname,
+      startingDate,
+      dayOfBirth,
+      personalNumber,
+      position,
+    })
   } else {
     res.status(422)
     throw new Error('Params should be ObjectID format.')
@@ -140,10 +171,10 @@ export const deleteEmployee = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error('No employee found with this id.')
     }
-    // remove company from database
+    // remove employee from database
     await employee.remove()
-    // see removed company id response
-    res.status(200).json({ id: req.params.id })
+    // see removed employee id response
+    res.status(200).json({ _id: req.params.id })
   } else {
     res.status(422)
     throw new Error('Params should be ObjectID format.')
