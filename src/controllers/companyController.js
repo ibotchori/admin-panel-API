@@ -58,13 +58,25 @@ export const getCompany = asyncHandler(async (req, res) => {
       throw new Error('No company found with this id.')
     }
     // extract data from founded company
-    const { name, url, logo, date } = company
+    const { name, url, logo, date, _id } = company
 
     // find employees with same companyID
-    const employees = await Employee.find({ companyID: req.params.id })
+    const employees = await Employee.find(
+      { companyID: req.params.id },
+      // extract only specific fields
+      {
+        name: 1,
+        surname: 1,
+        startingDate: 1,
+        dayOfBirth: 1,
+        personalNumber: 1,
+        position: 1,
+      }
+    )
 
     // show company with employees on response
     res.status(200).json({
+      _id,
       name,
       url,
       logo,
