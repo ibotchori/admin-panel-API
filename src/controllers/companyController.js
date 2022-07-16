@@ -60,38 +60,48 @@ export const setCompany = asyncHandler(async (req, res) => {
 export const getCompany = asyncHandler(async (req, res) => {
   // validate ObjectID with mongoose
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-    // get specific company from database by id
-    const company = await Company.findById(req.params.id)
-    if (!company) {
+    // get specific company from database by id, and add employees with same companyID.
+    const company = await Company.aggregate([
+      {
+        $match: {
+          $expr: { $eq: ['$_id', { $toObjectId: req.params.id }] },
+        },
+      },
+      {
+        $lookup: {
+          from: 'employees',
+          localField: '_id',
+          foreignField: 'companyID',
+          as: 'employees',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: 1,
+          url: 1,
+          logo: 1,
+          date: 1,
+          employees: 1,
+        },
+      },
+      {
+        $unset: [
+          'employees._id',
+          'employees.__v',
+          'employees.createdAt',
+          'employees.updatedAt',
+        ],
+      },
+    ])
+
+    if (company.length <= 0) {
       res.status(400)
       throw new Error('No company found with this id.')
     }
-    // extract data from founded company
-    const { name, url, logo, date, _id } = company
-
-    // find employees with same companyID
-    const employees = await Employee.find(
-      { companyID: req.params.id },
-      // extract only specific fields
-      {
-        name: 1,
-        surname: 1,
-        startingDate: 1,
-        dayOfBirth: 1,
-        personalNumber: 1,
-        position: 1,
-      }
-    )
 
     // show company with employees on response
-    res.status(200).json({
-      _id,
-      name,
-      url,
-      logo,
-      date,
-      employees,
-    })
+    res.status(200).json(company[0])
   } else {
     res.status(422)
     throw new Error('Params should be ObjectID format.')
