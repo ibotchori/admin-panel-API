@@ -63,11 +63,13 @@ export const getCompany = asyncHandler(async (req, res) => {
     // get specific company from database by id, and add employees with same companyID.
     const company = await Company.aggregate([
       {
+        // find company by ID
         $match: {
           $expr: { $eq: ['$_id', { $toObjectId: req.params.id }] },
         },
       },
       {
+        // add employees array with same id
         $lookup: {
           from: 'employees',
           localField: '_id',
@@ -76,6 +78,7 @@ export const getCompany = asyncHandler(async (req, res) => {
         },
       },
       {
+        // extract fields from company
         $project: {
           _id: 0,
           name: 1,
@@ -86,6 +89,7 @@ export const getCompany = asyncHandler(async (req, res) => {
         },
       },
       {
+        // extract fields from company.employees array
         $unset: [
           'employees._id',
           'employees.__v',
