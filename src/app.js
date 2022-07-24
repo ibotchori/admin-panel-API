@@ -1,8 +1,9 @@
-import express, { json } from 'express'
+import express, { json, urlencoded } from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
 import YAML from 'yamljs'
 import swaggerUI from 'swagger-ui-express'
+import cors from 'cors'
 import { userRoutes, companyRoutes, employeeRoutes } from './routes'
 import { errorHandler } from './middleware/errorMiddleware'
 import connectDB from './config/db'
@@ -25,7 +26,8 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 // Middleware
 app.use(json()) // <-- body parser
-app.use(express.urlencoded({ extended: false })) // <-- url encode
+app.use(urlencoded({ extended: false })) // <-- url encode
+app.use(cors()) // <-- cors middleware
 
 const PORT = process.env.SERVER_PORT || 4000
 
