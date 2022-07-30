@@ -52,11 +52,11 @@ paths:
               schema: 
                   type: object
                   properties:                  
+                    _id:
+                      type: string
                     username:
                       type: string
                     email:
-                      type: string
-                    password:
                       type: string
                   example:
                       _id: "62c2ef14dc41eb120af63460"
