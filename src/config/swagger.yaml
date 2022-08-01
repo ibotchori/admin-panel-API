@@ -40,8 +40,8 @@ paths:
                   type: string
                   required: true
             example:
-              username: kosta
-              email: kosta@gmail.com
+              username: "kosta"
+              email: "kosta@gmail.com"
               password: "123123"
               repeatPassword: "123123"
       responses:
@@ -80,7 +80,7 @@ paths:
                   type: string
                   required: true
             example:
-              email: kosta@gmail.com
+              email: "kosta@gmail.com"
               password: "123"
       responses:
         '200': 
@@ -145,7 +145,7 @@ paths:
                   type: string
                   required: true  
             example:
-              name: Facebook
+              name: "Facebook"
               url: "https://www.facebook.com"              
               logo: "https://static.remove.bg/remove-bg-web/5c20.jpg"
               date: "2010-09-09"
@@ -170,10 +170,11 @@ paths:
         - bearerAuth: []      
       parameters:
         - in: path
-          name: companyId
+          name: companyId # Note the name is the same as in the path
           required: true
-          type: ObjectId
-          minimum: 1
+          schema:
+            type: string
+            minimum: 1
           description: Company ID is required
       responses:
         '200': 
@@ -242,10 +243,11 @@ paths:
         - bearerAuth: []
       parameters:
         - in: path
-          name: companyId
+          name: companyId # Note the name is the same as in the path
           required: true
-          type: ObjectId
-          minimum: 1
+          schema:
+            type: string
+            minimum: 1
           description: Company ID is required  
       requestBody:
         content:
@@ -300,10 +302,11 @@ paths:
         - bearerAuth: []
       parameters:
         - in: path
-          name: id
+          name: id # Note the name is the same as in the path
           required: true
-          type: ObjectId
-          minimum: 1
+          schema:
+            type: string
+            minimum: 1
           description: Company ID is required
       responses:
         '200': 
@@ -317,7 +320,7 @@ paths:
                       type: string
                       required: true    
                   example:
-                      _id: 62c9d777b304567fcfbff851                    
+                      _id: "62c9d777b304567fcfbff851"                    
   /api/employees:
     post:
       summary: Create new employee
@@ -353,9 +356,9 @@ paths:
                   type: string
                   required: true  
             example:
-              companyID: 62cd5a178b710513c17ae362
-              name: David
-              surname: Davituliani
+              companyID: "62cd5a178b710513c17ae362"
+              name: "David"
+              surname: "Davituliani"
               startingDate: "2010-10-12"              
               dayOfBirth: "1990-01-10"
               personalNumber: "60001022111"
@@ -381,10 +384,11 @@ paths:
         - bearerAuth: []      
       parameters:
         - in: path
-          name: employeeId
+          name: employeeId # Note the name is the same as in the path
           required: true
-          type: ObjectId
-          minimum: 1
+          schema:
+            type: string
+            minimum: 1
           description: Employee ID is required
       responses:
         '200': 
@@ -428,10 +432,11 @@ paths:
         - bearerAuth: []
       parameters:
         - in: path
-          name: employeeId
+          name: employeeId # Note the name is the same as in the path
           required: true
-          type: ObjectId
-          minimum: 1
+          schema:
+            type: string
+            minimum: 1
           description: Employee ID is required  
       requestBody:
         content:
@@ -461,9 +466,9 @@ paths:
                   type: string
                   required: true  
             example:
-              companyID: 62c9d777b304567fcfbff851
-              name: David
-              surname: Davituliani
+              companyID: "62c9d777b304567fcfbff851"
+              name: "David"
+              surname: "Davituliani"
               startingDate: "2020-01-01"              
               dayOfBirth: "2010-01-01" 
               personalNumber: "60001022111"
@@ -491,9 +496,9 @@ paths:
                     position:
                       type: string    
                   example:
-                      companyID: 62c9d777b304567fcfbff851
-                      name: David
-                      surname: Davituliani
+                      companyID: "62c9d777b304567fcfbff851"
+                      name: "David"
+                      surname: "Davituliani"
                       startingDate: "Thu Sep 09 2010 04:00:00 GMT+0400 (Georgia Standard Time)"            
                       dayOfBirth: "Thu Sep 09 2000 04:00:00 GMT+0400 (Georgia Standard Time)"
                       personalNumber: "60001022111"
@@ -507,10 +512,11 @@ paths:
         - bearerAuth: []
       parameters:
         - in: path
-          name: id
+          name: id # Note the name is the same as in the path
           required: true
-          type: ObjectId
-          minimum: 1
+          schema:
+            type: string
+            minimum: 1
           description: Employee ID is required
       responses:
         '200': 
@@ -524,4 +530,4 @@ paths:
                       type: string
                       required: true    
                   example:
-                      _id: 62c9d777b304567fcfbff851
+                      _id: "62c9d777b304567fcfbff851"
