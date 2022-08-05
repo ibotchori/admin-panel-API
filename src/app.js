@@ -36,6 +36,11 @@ app.use('/', userRoutes)
 app.use('/api/companies', companyRoutes)
 app.use('/api/employees', employeeRoutes)
 
+// home page
+app.get('/', (req, res) => {
+  res.send('Add "/api-docs" in url to see documentation')
+})
+
 // overwrite the default express error handler with custom error handler middleware
 app.use(errorHandler) // <-- error handler middleware
 
