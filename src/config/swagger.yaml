@@ -7,7 +7,7 @@ info:
 servers:
   - url: http://localhost:4000/
     description: local server
-  - url: http://producation.app/
+  - url: https://admin-panel-api.ibotchori.space/
     description: production server
 components:
   securitySchemes:
